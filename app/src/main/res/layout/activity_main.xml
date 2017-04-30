@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TableRow>
-        <ToggleButton
+    <ToggleButton
             android:id="@+id/togglebutton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="*">
+    <TableRow>
+        <TextView
+            android:text="distance" />
+        <TextView
+            android:id="@+id/distanceTextView"
+            android:text="distance" />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="speed" />
+        <TextView
+            android:id="@+id/speedTextView"
+            android:text="speed" />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="duration" />
+        <TextView
+            android:id="@+id/durationTextView"
+            android:text="duration" />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/latitudeTextView"
+            android:text="latitude" />
+        <TextView
+            android:id="@+id/longitudeTextView"
+            android:text="longitude" />
     </TableRow>
 </TableLayout>
+</LinearLayout>
