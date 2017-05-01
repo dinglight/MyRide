@@ -36,6 +36,13 @@
     </TableRow>
     <TableRow>
         <TextView
+            android:text="accuracy" />
+        <TextView
+            android:id="@+id/accuracyTextView"
+            android:text="accuracy" />
+    </TableRow>
+    <TableRow>
+        <TextView
             android:id="@+id/latitudeTextView"
             android:text="latitude" />
         <TextView

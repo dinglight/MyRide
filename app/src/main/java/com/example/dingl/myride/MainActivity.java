@@ -15,7 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyRide";
@@ -27,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView mDistanceTextView;
     private TextView mSpeedTextView;
     private TextView mDurationTextView;
+    private TextView mAccuracyTextView;
 
-    private Long mStartTime;
-    private Long mStopTime;
+    private Date mStartTime;
+    private Date mStopTime;
     private float mDistance;
     private Location mLastLocation = null;
 
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mDistanceTextView = (TextView) findViewById(R.id.distanceTextView);
         mSpeedTextView = (TextView) findViewById(R.id.speedTextView);
         mDurationTextView = (TextView) findViewById(R.id.durationTextView);
+        mAccuracyTextView = (TextView) findViewById(R.id.accuracyTextView);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // get all aviable provider
@@ -114,18 +120,19 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "No permisstion to use", Toast.LENGTH_SHORT).show();
             return;
         }
-        mStartTime = System.currentTimeMillis()/1000;
+        mStartTime = new Date(System.currentTimeMillis());
         mDistance = 0;
-        mLastLocation = mLocationManager.getLastKnownLocation(mProvider);
         mLocationManager.requestLocationUpdates(mProvider, 5000, 1, mLocationListener);
     }
 
     private void stopRide() {
-        mStopTime = System.currentTimeMillis()/1000;
-        Long duration = mStopTime - mStartTime;
-        mDurationTextView.setText(String.format("%f s", duration));
+        mStopTime = new Date(System.currentTimeMillis());
+        Long duration = mStopTime.getTime() - mStartTime.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        mDurationTextView.setText(dateFormat.format(duration));
         float speed = mDistance/duration;
-        mSpeedTextView.setText(String.format("%f, m/s", speed));
+        mSpeedTextView.setText(String.format(Locale.UK, "%f m/s", speed/1000));
 
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(mLocationListener);
@@ -133,12 +140,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLocation(final Location location) {
-        mLatitudeTextView.setText(String.format("%f", location.getLatitude()));
-        mLongitudeTextView.setText(String.format("%f", location.getLongitude()));
-        mSpeedTextView.setText(String.format("%f m/s", location.getSpeed()));
+        mLatitudeTextView.setText(String.format(Locale.UK, "%f", location.getLatitude()));
+        mLongitudeTextView.setText(String.format(Locale.UK, "%f", location.getLongitude()));
+        mSpeedTextView.setText(String.format(Locale.UK, "%f m/s", location.getSpeed()));
+        mAccuracyTextView.setText(String.format(Locale.UK, "%f", location.getAccuracy()));
         if (mLastLocation != null) {
             mDistance += location.distanceTo(mLastLocation);
-            mDistanceTextView.setText(String.format("%f m", mDistance));
+            mDistanceTextView.setText(String.format(Locale.UK, "%f m", mDistance));
         }
     }
 }
